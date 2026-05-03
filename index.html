@@ -1969,10 +1969,6 @@ async function submitTahap2() {
   try {
     const kode = document.getElementById('kodePendaftaran')?.textContent || '';
 
-    // Upload semua file dokumen
-    let foto_siswa_url = null, akta_lahir_url = null, kartu_keluarga_url = null;
-    let ktp_ayah_url = null, ktp_ibu_url = null, ktp_wali_url = null;
-
     // Upload semua file dokumen (dengan error handling per-file)
     let foto_siswa_url = null, akta_lahir_url = null, kartu_keluarga_url = null;
     let ktp_ayah_url = null, ktp_ibu_url = null, ktp_wali_url = null;
