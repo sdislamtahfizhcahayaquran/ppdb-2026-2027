@@ -1099,8 +1099,8 @@ select option { background: white; }
           </select>
         </div>
         <div class="field-group">
-          <label>Pendidikan Terakhir</label>
-          <select id="t2_pendidikanAyah">
+          <label>Pendidikan Terakhir <span class="req">*</span></label>
+          <select id="t2_pendidikanAyah" required>
             <option value="">Pilih</option>
             <option>Tidak Sekolah</option><option>SD/Sederajat</option><option>SMP/Sederajat</option>
             <option>SMA/Sederajat</option><option>D3</option><option>S1/D4</option><option>S2</option><option>S3</option>
@@ -1109,24 +1109,34 @@ select option { background: white; }
       </div>
       <div class="field-row">
         <div class="field-group">
-          <label>Pekerjaan</label>
-          <select id="t2_pekerjaanAyah">
+          <label>Pekerjaan <span class="req">*</span></label>
+          <select id="t2_pekerjaanAyah" required onchange="toggleLainnya(this,'t2_pekerjaanAyahLainnya')">
             <option value="">Pilih</option>
-            <option>PNS/ASN</option><option>TNI/Polri</option><option>Karyawan Swasta</option>
-            <option>Wiraswasta</option><option>Petani</option><option>Pedagang</option>
-            <option>Guru/Dosen</option><option>Dokter/Tenaga Medis</option>
+            <option>PNS/ASN</option><option>TNI/Polri</option><option>BUMN/BUMD</option>
+            <option>Karyawan Swasta</option><option>Wiraswasta</option>
+            <option>Pedagang</option><option>Petani/Pekebun</option><option>Nelayan</option>
+            <option>Buruh Harian</option><option>Guru/Dosen</option>
+            <option>Dokter/Tenaga Medis</option><option>Pengacara/Notaris</option>
+            <option>Arsitek/Insinyur</option><option>Seniman/Kreator</option>
             <option>Tidak Bekerja</option><option>Lainnya</option>
           </select>
+          <input type="text" id="t2_pekerjaanAyahLainnya" placeholder="Tuliskan pekerjaan..." style="display:none;margin-top:6px">
         </div>
         <div class="field-group">
-          <label>Penghasilan/Bulan</label>
-          <select id="t2_penghasilanAyah">
+          <label>Penghasilan/Bulan <span class="req">*</span></label>
+          <select id="t2_penghasilanAyah" required>
             <option value="">Pilih</option>
+            <option>Tidak Berpenghasilan</option>
             <option>Di bawah Rp 500.000</option>
-            <option>Rp 500.000 – Rp 2.000.000</option>
-            <option>Rp 2.000.000 – Rp 5.000.000</option>
-            <option>Rp 5.000.000 – Rp 10.000.000</option>
-            <option>Di atas Rp 10.000.000</option>
+            <option>Rp 500.000 – Rp 1.000.000</option>
+            <option>Rp 1.000.000 – Rp 2.000.000</option>
+            <option>Rp 2.000.000 – Rp 3.000.000</option>
+            <option>Rp 3.000.000 – Rp 5.000.000</option>
+            <option>Rp 5.000.000 – Rp 7.500.000</option>
+            <option>Rp 7.500.000 – Rp 10.000.000</option>
+            <option>Rp 10.000.000 – Rp 15.000.000</option>
+            <option>Rp 15.000.000 – Rp 20.000.000</option>
+            <option>Di atas Rp 20.000.000</option>
           </select>
         </div>
       </div>
@@ -1172,8 +1182,8 @@ select option { background: white; }
           <select id="t2_wniIbu"><option value="WNI">WNI</option><option value="WNA">WNA</option></select>
         </div>
         <div class="field-group">
-          <label>Pendidikan Terakhir</label>
-          <select id="t2_pendidikanIbu">
+          <label>Pendidikan Terakhir <span class="req">*</span></label>
+          <select id="t2_pendidikanIbu" required>
             <option value="">Pilih</option>
             <option>Tidak Sekolah</option><option>SD/Sederajat</option><option>SMP/Sederajat</option>
             <option>SMA/Sederajat</option><option>D3</option><option>S1/D4</option><option>S2</option><option>S3</option>
@@ -1182,22 +1192,34 @@ select option { background: white; }
       </div>
       <div class="field-row">
         <div class="field-group">
-          <label>Pekerjaan</label>
-          <select id="t2_pekerjaanIbu">
+          <label>Pekerjaan <span class="req">*</span></label>
+          <select id="t2_pekerjaanIbu" required onchange="toggleLainnya(this,'t2_pekerjaanIbuLainnya')">
             <option value="">Pilih</option>
-            <option>PNS/ASN</option><option>Karyawan Swasta</option><option>Wiraswasta</option>
-            <option>Guru/Dosen</option><option>Ibu Rumah Tangga</option><option>Lainnya</option>
+            <option>PNS/ASN</option><option>TNI/Polri</option><option>BUMN/BUMD</option>
+            <option>Karyawan Swasta</option><option>Wiraswasta</option>
+            <option>Pedagang</option><option>Petani/Pekebun</option>
+            <option>Guru/Dosen</option><option>Dokter/Tenaga Medis</option>
+            <option>Pengacara/Notaris</option><option>Arsitek/Insinyur</option>
+            <option>Seniman/Kreator</option><option>Ibu Rumah Tangga</option>
+            <option>Tidak Bekerja</option><option>Lainnya</option>
           </select>
+          <input type="text" id="t2_pekerjaanIbuLainnya" placeholder="Tuliskan pekerjaan..." style="display:none;margin-top:6px">
         </div>
         <div class="field-group">
-          <label>Penghasilan/Bulan</label>
-          <select id="t2_penghasilanIbu">
+          <label>Penghasilan/Bulan <span class="req">*</span></label>
+          <select id="t2_penghasilanIbu" required>
             <option value="">Pilih</option>
+            <option>Tidak Berpenghasilan</option>
             <option>Di bawah Rp 500.000</option>
-            <option>Rp 500.000 – Rp 2.000.000</option>
-            <option>Rp 2.000.000 – Rp 5.000.000</option>
-            <option>Rp 5.000.000 – Rp 10.000.000</option>
-            <option>Di atas Rp 10.000.000</option>
+            <option>Rp 500.000 – Rp 1.000.000</option>
+            <option>Rp 1.000.000 – Rp 2.000.000</option>
+            <option>Rp 2.000.000 – Rp 3.000.000</option>
+            <option>Rp 3.000.000 – Rp 5.000.000</option>
+            <option>Rp 5.000.000 – Rp 7.500.000</option>
+            <option>Rp 7.500.000 – Rp 10.000.000</option>
+            <option>Rp 10.000.000 – Rp 15.000.000</option>
+            <option>Rp 15.000.000 – Rp 20.000.000</option>
+            <option>Di atas Rp 20.000.000</option>
           </select>
         </div>
       </div>
@@ -1266,17 +1288,31 @@ select option { background: white; }
       </div>
       <div class="field-row">
         <div class="field-group"><label>Pekerjaan</label>
-          <select id="t2_pekerjaanWali"><option value="">Pilih</option><option>PNS/ASN</option><option>Karyawan Swasta</option><option>Wiraswasta</option><option>Lainnya</option></select>
+          <select id="t2_pekerjaanWali" onchange="toggleLainnya(this,'t2_pekerjaanWaliLainnya')">
+            <option value="">Pilih</option>
+            <option>PNS/ASN</option><option>TNI/Polri</option><option>BUMN/BUMD</option>
+            <option>Karyawan Swasta</option><option>Wiraswasta</option>
+            <option>Pedagang</option><option>Petani/Pekebun</option>
+            <option>Guru/Dosen</option><option>Dokter/Tenaga Medis</option>
+            <option>Tidak Bekerja</option><option>Lainnya</option>
+          </select>
+          <input type="text" id="t2_pekerjaanWaliLainnya" placeholder="Tuliskan pekerjaan..." style="display:none;margin-top:6px">
         </div>
         <div class="field-group">
           <label>Penghasilan/Bulan</label>
           <select id="t2_penghasilanWali">
             <option value="">Pilih</option>
+            <option>Tidak Berpenghasilan</option>
             <option>Di bawah Rp 500.000</option>
-            <option>Rp 500.000 – Rp 2.000.000</option>
-            <option>Rp 2.000.000 – Rp 5.000.000</option>
-            <option>Rp 5.000.000 – Rp 10.000.000</option>
-            <option>Di atas Rp 10.000.000</option>
+            <option>Rp 500.000 – Rp 1.000.000</option>
+            <option>Rp 1.000.000 – Rp 2.000.000</option>
+            <option>Rp 2.000.000 – Rp 3.000.000</option>
+            <option>Rp 3.000.000 – Rp 5.000.000</option>
+            <option>Rp 5.000.000 – Rp 7.500.000</option>
+            <option>Rp 7.500.000 – Rp 10.000.000</option>
+            <option>Rp 10.000.000 – Rp 15.000.000</option>
+            <option>Rp 15.000.000 – Rp 20.000.000</option>
+            <option>Di atas Rp 20.000.000</option>
           </select>
         </div>
       </div>
@@ -1317,16 +1353,7 @@ select option { background: white; }
         <div><h2>Upload Dokumen</h2><p>Foto/scan dokumen pendukung</p></div>
       </div>
       <div class="field-group">
-        <label>Foto Siswa <span class="opt">(jika ada)</span></label>
-        <div class="upload-area" id="ua_fotoSiswa">
-          <input type="file" accept="image/*" onchange="handleUpload(this,'ua_fotoSiswa','fn_fotoSiswa')">
-          <div class="upload-icon">🖼️</div><div class="upload-label">Foto Siswa</div>
-          <div class="upload-sub">JPG atau PNG • Maks. 5MB</div>
-          <div class="upload-filename" id="fn_fotoSiswa"></div>
-        </div>
-      </div>
-      <div class="field-group">
-        <label>KTP Ayah</label>
+        <label>KTP Ayah <span class="req">*</span></label>
         <div class="upload-area" id="ua_ktpAyah">
           <input type="file" accept="image/*,.pdf" onchange="handleUpload(this,'ua_ktpAyah','fn_ktpAyah')">
           <div class="upload-icon">📄</div><div class="upload-label">Foto / Scan KTP Ayah</div>
@@ -1353,7 +1380,8 @@ select option { background: white; }
         </div>
       </div>
       <div class="field-group">
-        <label>Akta Kelahiran Siswa</label>
+        <label>Akta Kelahiran Siswa <span class="req">*</span></label>
+        <div class="field-note" style="margin-bottom:6px">📌 Jika belum punya akta, isi kolom No. Registrasi Akta Lahir dengan <strong>0</strong> dan tetap upload dokumen pengganti jika ada.</div>
         <div class="upload-area" id="ua_akta">
           <input type="file" accept="image/*,.pdf" onchange="handleUpload(this,'ua_akta','fn_akta')">
           <div class="upload-icon">📋</div><div class="upload-label">Foto / Scan Akta Kelahiran</div>
@@ -1793,8 +1821,15 @@ async function submitTahap1() {
     window.scrollTo({top:0, behavior:'smooth'});
 
   } catch (err) {
-    console.error(err);
-    showToast('Gagal menyimpan. Periksa koneksi internet.');
+    console.error('Tahap1 error:', err);
+    const msg = err.message || '';
+    if (msg.includes('column') || msg.includes('null')) {
+      showToast('Error kolom database. Screenshot konsol dan hubungi admin.');
+    } else if (msg.includes('JWT') || msg.includes('apikey') || msg.includes('auth')) {
+      showToast('Error autentikasi Supabase. Cek API key.');
+    } else {
+      showToast('Gagal menyimpan: ' + (msg.slice(0,80) || 'periksa koneksi internet'));
+    }
     if (btn) { btn.disabled = false; btn.textContent = 'Kirim Data Tahap 1 →'; }
   }
 }
@@ -1856,6 +1891,26 @@ function samaAlamatT2(target, src) {
   }
 }
 
+function toggleLainnya(sel, inputId) {
+  const inp = document.getElementById(inputId);
+  if (!inp) return;
+  if (sel.value === 'Lainnya') {
+    inp.style.display = 'block';
+    inp.focus();
+  } else {
+    inp.style.display = 'none';
+    inp.value = '';
+  }
+}
+
+function getValPekerjaan(selectId, lainnyaId) {
+  const val = getVal(selectId);
+  if (val === 'Lainnya') {
+    return getVal(lainnyaId) || 'Lainnya';
+  }
+  return val;
+}
+
 function handleUpload(input, areaId, fnId) {
   if (input.files[0]) {
     document.getElementById(areaId).classList.add('has-file');
@@ -1865,11 +1920,48 @@ function handleUpload(input, areaId, fnId) {
 }
 
 async function submitTahap2() {
-  // Validasi NIK wajib
+  // ─── VALIDASI WAJIB ──────────────────────────────────────
   const nikAyah = document.getElementById('t2_nikAyah')?.value.trim();
-  const nikIbu = document.getElementById('t2_nikIbu')?.value.trim();
+  const nikIbu  = document.getElementById('t2_nikIbu')?.value.trim();
   if (!nikAyah || nikAyah.length !== 16) { showToast('NIK Ayah harus 16 digit'); return; }
-  if (!nikIbu || nikIbu.length !== 16) { showToast('NIK Ibu harus 16 digit'); return; }
+  if (!nikIbu  || nikIbu.length  !== 16) { showToast('NIK Ibu harus 16 digit');  return; }
+
+  const wajib = [
+    { id: 't2_pendidikanAyah', label: 'Pendidikan Terakhir Ayah' },
+    { id: 't2_pekerjaanAyah',  label: 'Pekerjaan Ayah' },
+    { id: 't2_penghasilanAyah',label: 'Penghasilan Ayah' },
+    { id: 't2_pendidikanIbu',  label: 'Pendidikan Terakhir Ibu' },
+    { id: 't2_pekerjaanIbu',   label: 'Pekerjaan Ibu' },
+    { id: 't2_penghasilanIbu', label: 'Penghasilan Ibu' },
+    { id: 't2_jalan',          label: 'Alamat Jalan Siswa' },
+    { id: 't2_rt',             label: 'RT Siswa' },
+    { id: 't2_rw',             label: 'RW Siswa' },
+    { id: 't2_kel',            label: 'Kelurahan Siswa' },
+    { id: 't2_kec',            label: 'Kecamatan Siswa' },
+    { id: 't2_kota',           label: 'Kota/Kabupaten Siswa' },
+    { id: 't2_prov',           label: 'Provinsi Siswa' },
+  ];
+  for (const f of wajib) {
+    const el = document.getElementById(f.id);
+    if (!el || !el.value.trim()) {
+      el?.classList.add('error');
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast(`Wajib diisi: ${f.label}`);
+      return;
+    }
+  }
+
+  // Validasi pekerjaan lainnya
+  if (getVal('t2_pekerjaanAyah') === 'Lainnya' && !getVal('t2_pekerjaanAyahLainnya')) {
+    showToast('Tuliskan pekerjaan Ayah'); return;
+  }
+  if (getVal('t2_pekerjaanIbu') === 'Lainnya' && !getVal('t2_pekerjaanIbuLainnya')) {
+    showToast('Tuliskan pekerjaan Ibu'); return;
+  }
+
+  // Validasi akta wajib upload
+  const aktaFile = document.getElementById('ua_akta')?.querySelector('input[type="file"]')?.files[0];
+  if (!aktaFile) { showToast('Akta Kelahiran wajib diupload (isi 0 di No. Akta jika belum punya)'); return; }
 
   const btn = document.querySelector('#tahap2Page .btn-submit') || document.querySelector('.btn-submit');
   if (btn) { btn.disabled = true; btn.textContent = 'Menyimpan...'; }
@@ -1881,19 +1973,28 @@ async function submitTahap2() {
     let foto_siswa_url = null, akta_lahir_url = null, kartu_keluarga_url = null;
     let ktp_ayah_url = null, ktp_ibu_url = null, ktp_wali_url = null;
 
-    const fotoFile   = document.getElementById('ua_fotoSiswa')?.querySelector('input[type="file"]')?.files[0];
-    const aktaFile   = document.getElementById('ua_akta')?.querySelector('input[type="file"]')?.files[0];
-    const kkFile     = document.getElementById('ua_kk')?.querySelector('input[type="file"]')?.files[0];
+    // Upload semua file dokumen (dengan error handling per-file)
+    let foto_siswa_url = null, akta_lahir_url = null, kartu_keluarga_url = null;
+    let ktp_ayah_url = null, ktp_ibu_url = null, ktp_wali_url = null;
+
+    const kkFile      = document.getElementById('ua_kk')?.querySelector('input[type="file"]')?.files[0];
     const ktpAyahFile = document.getElementById('ua_ktpAyah')?.querySelector('input[type="file"]')?.files[0];
     const ktpIbuFile  = document.getElementById('ua_ktpIbu')?.querySelector('input[type="file"]')?.files[0];
     const ktpWaliFile = document.getElementById('ua_ktpWali')?.querySelector('input[type="file"]')?.files[0];
 
-    if (fotoFile)    foto_siswa_url      = await uploadFile(fotoFile,    `${kode}/foto-siswa`);
-    if (aktaFile)    akta_lahir_url      = await uploadFile(aktaFile,    `${kode}/akta-lahir`);
-    if (kkFile)      kartu_keluarga_url  = await uploadFile(kkFile,      `${kode}/kartu-keluarga`);
-    if (ktpAyahFile) ktp_ayah_url        = await uploadFile(ktpAyahFile, `${kode}/ktp-ayah`);
-    if (ktpIbuFile)  ktp_ibu_url         = await uploadFile(ktpIbuFile,  `${kode}/ktp-ibu`);
-    if (ktpWaliFile) ktp_wali_url        = await uploadFile(ktpWaliFile, `${kode}/ktp-wali`);
+    async function tryUpload(file, path) {
+      if (!file) return null;
+      try { return await uploadFile(file, path); }
+      catch(e) { console.warn('Upload gagal:', path, e.message); return null; }
+    }
+
+    if (btn) btn.textContent = 'Mengupload dokumen...';
+    akta_lahir_url      = await tryUpload(aktaFile,    `${kode}/akta-lahir`);
+    kartu_keluarga_url  = await tryUpload(kkFile,      `${kode}/kartu-keluarga`);
+    ktp_ayah_url        = await tryUpload(ktpAyahFile, `${kode}/ktp-ayah`);
+    ktp_ibu_url         = await tryUpload(ktpIbuFile,  `${kode}/ktp-ibu`);
+    ktp_wali_url        = await tryUpload(ktpWaliFile, `${kode}/ktp-wali`);
+    if (btn) btn.textContent = 'Menyimpan data...';
 
     const data = {
       status: 'tahap2_selesai',
@@ -1945,7 +2046,7 @@ async function submitTahap2() {
       nik_ayah: nikAyah,
       kewarganegaraan_ayah: getVal('t2_wniAyah'),
       pendidikan_ayah: getVal('t2_pendidikanAyah'),
-      pekerjaan_ayah: getVal('t2_pekerjaanAyah'),
+      pekerjaan_ayah: getValPekerjaan('t2_pekerjaanAyah','t2_pekerjaanAyahLainnya'),
       penghasilan_ayah: getVal('t2_penghasilanAyah'),
       alamat_ayah: getVal('t2_jalanAyah'),
       rt_ayah: getVal('t2_rtAyah'),
@@ -1959,7 +2060,7 @@ async function submitTahap2() {
       nik_ibu: nikIbu,
       kewarganegaraan_ibu: getVal('t2_wniIbu'),
       pendidikan_ibu: getVal('t2_pendidikanIbu'),
-      pekerjaan_ibu: getVal('t2_pekerjaanIbu'),
+      pekerjaan_ibu: getValPekerjaan('t2_pekerjaanIbu','t2_pekerjaanIbuLainnya'),
       penghasilan_ibu: getVal('t2_penghasilanIbu'),
       alamat_ibu: getVal('t2_jalanIbu'),
       rt_ibu: getVal('t2_rtIbu'),
@@ -1976,7 +2077,7 @@ async function submitTahap2() {
       tanggal_lahir_wali: getVal('t2_tglLahirWali') || null,
       kewarganegaraan_wali: getVal('t2_wniWali'),
       pendidikan_wali: getVal('t2_pendidikanWali'),
-      pekerjaan_wali: getVal('t2_pekerjaanWali'),
+      pekerjaan_wali: getValPekerjaan('t2_pekerjaanWali','t2_pekerjaanWaliLainnya'),
       penghasilan_wali: getVal('t2_penghasilanWali'),
       no_hp_wali: getVal('t2_hpWali'),
       alamat_wali: getVal('t2_jalanWali'),
@@ -1988,7 +2089,6 @@ async function submitTahap2() {
       kota_wali: getVal('t2_kotaWali'),
       provinsi_wali: getVal('t2_provWali'),
       // ─── DOKUMEN ───────────────────────────────────────────
-      foto_siswa_url,
       akta_lahir_url,
       kartu_keluarga_url,
       ktp_ayah_url,
@@ -2021,8 +2121,15 @@ async function submitTahap2() {
     window.scrollTo({top:0, behavior:'smooth'});
 
   } catch (err) {
-    console.error(err);
-    showToast('Gagal menyimpan. Periksa koneksi internet.');
+    console.error('Tahap2 error:', err);
+    const msg = err.message || '';
+    if (msg.includes('column') || msg.includes('null') || msg.includes('violates')) {
+      showToast('Error kolom database: ' + msg.slice(0,100));
+    } else if (msg.includes('JWT') || msg.includes('apikey') || msg.includes('auth')) {
+      showToast('Error autentikasi Supabase. Cek API key.');
+    } else {
+      showToast('Gagal menyimpan: ' + (msg.slice(0,80) || 'periksa koneksi internet'));
+    }
     if (btn) { btn.disabled = false; btn.textContent = 'Kirim Data Lengkap ✓'; }
   }
 }
