@@ -2007,36 +2007,6 @@ async function submitTahap2() {
     if (btn) { btn.disabled = false; btn.textContent = 'Kirim Data Lengkap ✓'; }
   }
 }
-      await supabaseUpdate('pendaftaran', pendaftaranId, data);
-    } else {
-      data.nomor_pendaftaran = kode;
-      await supabaseInsert('pendaftaran', data);
-    }
-
-    // Tampilkan selesai
-    document.getElementById('tahap2Page').innerHTML = `
-      <div style="text-align:center;padding:40px 20px;">
-        <div class="success-icon">🎉</div>
-        <h2 style="font-size:19px;color:var(--hijau);margin:16px 0 8px">Data Lengkap Terkirim!</h2>
-        <p style="font-size:13px;color:var(--teks-mid);line-height:1.7">
-          Jazakumullahu khairan. Semua data siswa telah kami terima dengan lengkap.
-        </p>
-        <div class="info-box" style="text-align:left;margin-top:16px">
-          Tim kami akan memverifikasi data dan menghubungi orang tua melalui nomor HP yang telah didaftarkan.
-        </div>
-        <button class="btn btn-submit" style="width:100%;margin-top:16px" onclick="location.reload()">Daftar Siswa Lain</button>
-      </div>
-    `;
-    window.scrollTo({top:0, behavior:'smooth'});
-
-  } catch (err) {
-    console.error(err);
-    showToast('Gagal menyimpan. Periksa koneksi internet.');
-    if (btn) { btn.disabled = false; btn.textContent = 'Kirim Data Lengkap ✓'; }
-  }
-}
-
-
 // ===== LANDING PAGE LOGIC =====
 function mulaiDaftarBaru() {
   const lo = document.getElementById('landingOverlay');
