@@ -592,25 +592,32 @@ select option { background: white; }
     <!-- JUZ DULU, BARU SURAT -->
     <div class="field-group">
       <label>Berapa Juz yang Sudah Dihafal? <span class="req">*</span></label>
-      <select id="juzHafalan" onchange="showSuratIfAda()">
+      <select id="juzHafalan" onchange="showJuzDetail()">
         <option value="">Pilih</option>
         <option value="0">Belum ada hafalan</option>
-        <option value="sebagian">Sebagian Juz 30</option>
-        <option value="1">1 Juz (Juz 30)</option>
-        <option value="2">2 Juz</option>
-        <option value="3">3 Juz</option>
-        <option value="5">5 Juz</option>
-        <option value="10">10 Juz</option>
-        <option value="15">15 Juz</option>
-        <option value="20">20 Juz</option>
+        <option value="sebagian">Sedang menghafal Juz 30 (belum selesai)</option>
+        <option value="1">1 Juz — sudah khatam Juz 30</option>
+        <option value="lebih">Lebih dari 1 Juz</option>
         <option value="30">30 Juz (Hafizh) 🎉</option>
       </select>
+    </div>
+    <div class="field-group" id="juzDetailWrap" style="display:none">
+      <label>Berapa Juz yang Sudah Dihafal? <span class="req">*</span></label>
+      <input type="number" id="juzJumlah" placeholder="Contoh: 3" min="2" max="29" inputmode="numeric"
+        oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+      <div class="field-note" style="margin-top:6px">Tuliskan jumlah juz yang sudah dihafal (misal: 3)</div>
+    </div>
+    <div class="field-group" id="juzListWrap" style="display:none">
+      <label>Juz Apa Saja? <span class="req">*</span></label>
+      <input type="text" id="juzList" placeholder="Contoh: 30, 29, 1">
+      <div class="field-note" style="margin-top:6px">Pisahkan dengan koma (misal: 30, 29, 1)</div>
     </div>
     <div class="field-group" id="suratWrap" style="display:none">
       <label>Hafalan Terakhir — Nama Surat <span class="req">*</span></label>
       <div class="autocomplete-wrap">
         <input type="text" id="suratInput" placeholder="Ketik nama atau nomor surat..."
-          autocomplete="off" oninput="cariSurat(this.value)" onfocus="cariSurat(this.value)">
+          autocomplete="off" oninput="cariSurat(this.value)" onfocus="cariSurat(this.value)"
+          onblur="validasiSurat(this)">
         <div class="autocomplete-list" id="suratList"></div>
         <input type="hidden" id="suratValue">
         <input type="hidden" id="suratAyatMax">
@@ -856,9 +863,8 @@ select option { background: white; }
           <input type="text" id="t2_nik" placeholder="16 digit NIK" maxlength="16" inputmode="numeric">
         </div>
         <div class="field-group">
-          <label>No. Registrasi Akta Lahir <span class="req">*</span></label>
-          <input type="text" id="t2_noAkta" placeholder="Isi nomor akta, atau 0 / - jika belum ada">
-          <div class="field-note">📌 Wajib diisi. Jika belum punya akta kelahiran, isi dengan <strong>0</strong> atau <strong>-</strong></div>
+          <label>No. Registrasi Akta Lahir</label>
+          <input type="text" id="t2_noAkta" placeholder="Nomor akta">
         </div>
       </div>
       <div class="field-row">
@@ -1070,13 +1076,14 @@ select option { background: white; }
       <div class="field-row">
         <div class="field-group">
           <label>Pekerjaan</label>
-          <select id="t2_pekerjaanAyah">
+          <select id="t2_pekerjaanAyah" onchange="showLainnya(this,'t2_pekerjaanAyahLain')">
             <option value="">Pilih</option>
             <option>PNS/ASN</option><option>TNI/Polri</option><option>Karyawan Swasta</option>
             <option>Wiraswasta</option><option>Petani</option><option>Pedagang</option>
             <option>Guru/Dosen</option><option>Dokter/Tenaga Medis</option>
             <option>Tidak Bekerja</option><option>Lainnya</option>
           </select>
+          <input type="text" id="t2_pekerjaanAyahLain" placeholder="Tuliskan pekerjaan..." style="display:none;margin-top:8px">
         </div>
         <div class="field-group">
           <label>Penghasilan/Bulan</label>
@@ -1269,7 +1276,7 @@ select option { background: white; }
         </div>
       </div>
       <div class="field-group">
-        <label>Akta Kelahiran Siswa <span class="opt">(upload jika ada)</span></label>
+        <label>Akta Kelahiran Siswa</label>
         <div class="upload-area" id="ua_akta">
           <input type="file" accept="image/*,.pdf" onchange="handleUpload(this,'ua_akta','fn_akta')">
           <div class="upload-icon">📋</div><div class="upload-label">Foto / Scan Akta Kelahiran</div>
@@ -1372,15 +1379,31 @@ function pilihTipe(tipe) {
 }
 
 // ===== JUZ -> TAMPILKAN SURAT =====
-function showSuratIfAda() {
+function showJuzDetail() {
   const juz = document.getElementById('juzHafalan').value;
-  const show = juz && juz !== '0';
-  document.getElementById('suratWrap').style.display = show ? 'block' : 'none';
-  if (!show) {
+  const adaHafalan = juz && juz !== '0';
+  const lebihDari1 = juz === 'lebih';
+
+  // Field jumlah & list juz
+  document.getElementById('juzDetailWrap').style.display = lebihDari1 ? 'block' : 'none';
+  document.getElementById('juzListWrap').style.display = lebihDari1 ? 'block' : 'none';
+
+  // Surat & ayat
+  document.getElementById('suratWrap').style.display = adaHafalan ? 'block' : 'none';
+  if (!adaHafalan) {
     document.getElementById('suratInput').value = '';
     document.getElementById('suratValue').value = '';
     document.getElementById('ayatField').style.display = 'none';
+    document.getElementById('juzJumlah') && (document.getElementById('juzJumlah').value = '');
+    document.getElementById('juzList') && (document.getElementById('juzList').value = '');
   }
+}
+
+function showLainnya(sel, targetId) {
+  const target = document.getElementById(targetId);
+  if (!target) return;
+  target.style.display = sel.value === 'Lainnya' ? 'block' : 'none';
+  if (sel.value !== 'Lainnya') target.value = '';
 }
 
 // ===== AUTOCOMPLETE SURAT =====
@@ -1414,6 +1437,15 @@ function pilihSurat(no) {
   document.getElementById('ayatHafalan').max = s.ayat;
   document.getElementById('ayatHafalan').placeholder = `1 - ${s.ayat}`;
   document.getElementById('ayatHafalan').focus();
+}
+
+function validasiSurat(el) {
+  // Kalau suratValue kosong tapi suratInput ada isi, berarti tidak pilih dari list
+  const val = document.getElementById('suratValue').value;
+  if (!val && el.value) {
+    el.value = '';
+    showToast('Pilih surat dari daftar yang muncul');
+  }
 }
 
 function hafalSemua() {
@@ -1514,7 +1546,7 @@ const REQUIRED = {
   ],
   3: [
     {id:'kemampuanBaca', label:'Kemampuan Membaca Al-Qur\'an', type:'radio', name:'kemampuanBaca'},
-    {id:'juzHafalan', label:'Jumlah Juz Hafalan'},
+    {id:'juzHafalan', label:'Pilihan Hafalan'},
     {id:'caBaca', label:'Kemampuan Membaca Huruf Latin', type:'radio', name:'caBaca'},
     {id:'caTulis', label:'Kemampuan Menulis', type:'radio', name:'caTulis'},
     {id:'caHitung', label:'Kemampuan Berhitung', type:'radio', name:'caHitung'},
@@ -1662,8 +1694,9 @@ async function submitTahap1() {
       // Tahfizh & hafalan
       kemampuan_baca_quran: getRadio('kemampuanBaca'),
       sudah_tpq: getRadio('tpq'),
-      hafalan_quran: getVal('juzHafalan'),
-      surat_hafalan: getVal('suratValue') || getVal('suratInput') || null,
+      hafalan_quran: getVal('juzHafalan') === 'lebih' ? (getVal('juzJumlah') || 'lebih') : getVal('juzHafalan'),
+      juz_list: getVal('juzList') || null,
+      surat_hafalan: getVal('suratValue') || null,
       ayat_hafalan: getVal('ayatHafalan') ? parseInt(getVal('ayatHafalan')) : null,
       catatan_tahsin: getVal('catatanTahsin'),
       // Kognitif (calistung)
@@ -1765,24 +1798,6 @@ function samaAlamatT2(target, src) {
   }
 }
 
-function toggleLainnya(sel, inputId) {
-  const inp = document.getElementById(inputId);
-  if (!inp) return;
-  if (sel.value === 'Lainnya') {
-    inp.style.display = 'block';
-    inp.focus();
-  } else {
-    inp.style.display = 'none';
-    inp.value = '';
-  }
-}
-
-function getValPekerjaan(selectId, lainnyaId) {
-  const val = getVal(selectId);
-  if (val === 'Lainnya') return getVal(lainnyaId) || 'Lainnya';
-  return val;
-}
-
 function handleUpload(input, areaId, fnId) {
   if (input.files[0]) {
     document.getElementById(areaId).classList.add('has-file');
@@ -1791,60 +1806,12 @@ function handleUpload(input, areaId, fnId) {
   }
 }
 
-async function tryUpload(file, path) {
-  if (!file) return null;
-  try { return await uploadFile(file, path); }
-  catch(e) { console.warn('Upload gagal:', path, e.message); return null; }
-}
-
 async function submitTahap2() {
-  // ─── VALIDASI WAJIB ──────────────────────────────────────
+  // Validasi NIK wajib
   const nikAyah = document.getElementById('t2_nikAyah')?.value.trim();
-  const nikIbu  = document.getElementById('t2_nikIbu')?.value.trim();
+  const nikIbu = document.getElementById('t2_nikIbu')?.value.trim();
   if (!nikAyah || nikAyah.length !== 16) { showToast('NIK Ayah harus 16 digit'); return; }
-  if (!nikIbu  || nikIbu.length  !== 16) { showToast('NIK Ibu harus 16 digit');  return; }
-
-  // Validasi No. Registrasi Akta Lahir wajib diisi
-  const noAkta = document.getElementById('t2_noAkta')?.value.trim();
-  if (!noAkta) {
-    document.getElementById('t2_noAkta')?.classList.add('error');
-    document.getElementById('t2_noAkta')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    showToast('No. Registrasi Akta Lahir wajib diisi (isi 0 atau - jika belum punya)');
-    return;
-  }
-
-  const wajib = [
-    { id: 't2_pendidikanAyah', label: 'Pendidikan Terakhir Ayah' },
-    { id: 't2_pekerjaanAyah',  label: 'Pekerjaan Ayah' },
-    { id: 't2_penghasilanAyah',label: 'Penghasilan Ayah' },
-    { id: 't2_pendidikanIbu',  label: 'Pendidikan Terakhir Ibu' },
-    { id: 't2_pekerjaanIbu',   label: 'Pekerjaan Ibu' },
-    { id: 't2_penghasilanIbu', label: 'Penghasilan Ibu' },
-    { id: 't2_jalan',          label: 'Alamat Jalan Siswa' },
-    { id: 't2_rt',             label: 'RT Siswa' },
-    { id: 't2_rw',             label: 'RW Siswa' },
-    { id: 't2_kel',            label: 'Kelurahan Siswa' },
-    { id: 't2_kec',            label: 'Kecamatan Siswa' },
-    { id: 't2_kota',           label: 'Kota/Kabupaten Siswa' },
-    { id: 't2_prov',           label: 'Provinsi Siswa' },
-  ];
-  for (const f of wajib) {
-    const el = document.getElementById(f.id);
-    if (!el || !el.value.trim()) {
-      el?.classList.add('error');
-      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      showToast(`Wajib diisi: ${f.label}`);
-      return;
-    }
-  }
-
-  // Validasi pekerjaan lainnya
-  if (getVal('t2_pekerjaanAyah') === 'Lainnya' && !getVal('t2_pekerjaanAyahLainnya')) {
-    showToast('Tuliskan pekerjaan Ayah'); return;
-  }
-  if (getVal('t2_pekerjaanIbu') === 'Lainnya' && !getVal('t2_pekerjaanIbuLainnya')) {
-    showToast('Tuliskan pekerjaan Ibu'); return;
-  }
+  if (!nikIbu || nikIbu.length !== 16) { showToast('NIK Ibu harus 16 digit'); return; }
 
   const btn = document.querySelector('#tahap2Page .btn-submit') || document.querySelector('.btn-submit');
   if (btn) { btn.disabled = true; btn.textContent = 'Menyimpan...'; }
@@ -1852,122 +1819,34 @@ async function submitTahap2() {
   try {
     const kode = document.getElementById('kodePendaftaran')?.textContent || '';
 
-    // Upload semua file dokumen (opsional, error handling per-file)
-    let akta_lahir_url = null, kartu_keluarga_url = null;
-    let ktp_ayah_url = null, ktp_ibu_url = null, ktp_wali_url = null;
+    // Upload file jika ada
+    let foto_siswa_url = null, akta_lahir_url = null, kartu_keluarga_url = null;
+    const fotoFile = document.getElementById('uploadFoto')?.files[0];
+    const aktaFile = document.getElementById('uploadAkta')?.files[0];
+    const kkFile = document.getElementById('uploadKK')?.files[0];
 
-    const aktaFile    = document.getElementById('ua_akta')?.querySelector('input[type="file"]')?.files[0];
-    const kkFile      = document.getElementById('ua_kk')?.querySelector('input[type="file"]')?.files[0];
-    const ktpAyahFile = document.getElementById('ua_ktpAyah')?.querySelector('input[type="file"]')?.files[0];
-    const ktpIbuFile  = document.getElementById('ua_ktpIbu')?.querySelector('input[type="file"]')?.files[0];
-    const ktpWaliFile = document.getElementById('ua_ktpWali')?.querySelector('input[type="file"]')?.files[0];
-
-    if (btn) btn.textContent = 'Mengupload dokumen...';
-    akta_lahir_url     = await tryUpload(aktaFile,    `${kode}/akta-lahir`);
-    kartu_keluarga_url = await tryUpload(kkFile,      `${kode}/kartu-keluarga`);
-    ktp_ayah_url       = await tryUpload(ktpAyahFile, `${kode}/ktp-ayah`);
-    ktp_ibu_url        = await tryUpload(ktpIbuFile,  `${kode}/ktp-ibu`);
-    ktp_wali_url       = await tryUpload(ktpWaliFile, `${kode}/ktp-wali`);
-    if (btn) btn.textContent = 'Menyimpan data...';
+    if (fotoFile) foto_siswa_url = await uploadFile(fotoFile, `${kode}/foto-siswa`);
+    if (aktaFile) akta_lahir_url = await uploadFile(aktaFile, `${kode}/akta-lahir`);
+    if (kkFile) kartu_keluarga_url = await uploadFile(kkFile, `${kode}/kartu-keluarga`);
 
     const data = {
       status: 'tahap2_selesai',
-      // ─── DATA SISWA TAMBAHAN (DAPODIK) ───────────────────────
-      nik_siswa: getVal('t2_nik'),
-      no_akta_lahir: noAkta,
-      anak_ke: getVal('t2_anakKe') ? parseInt(getVal('t2_anakKe')) : null,
-      jumlah_saudara_kandung: getVal('t2_saudaraKandung') ? parseInt(getVal('t2_saudaraKandung')) : null,
-      jumlah_saudara_tiri: getVal('t2_saudaraTiri') ? parseInt(getVal('t2_saudaraTiri')) : null,
-      jumlah_saudara_angkat: getVal('t2_saudaraAngkat') ? parseInt(getVal('t2_saudaraAngkat')) : null,
-      status_anak: getVal('t2_status'),
-      bahasa_sehari_hari: getVal('t2_bahasa'),
-      suku: getVal('t2_suku'),
-      golongan_darah: getVal('t2_golDarah'),
-      tinggi_badan: getVal('t2_tinggiBadan') ? parseFloat(getVal('t2_tinggiBadan')) : null,
-      berat_badan: getVal('t2_beratBadan') ? parseFloat(getVal('t2_beratBadan')) : null,
-      lingkar_kepala: getVal('t2_lingkarKepala') ? parseFloat(getVal('t2_lingkarKepala')) : null,
-      tinggal_bersama: getVal('t2_tinggal'),
-      jarak_ke_sekolah: getVal('t2_jarak') ? parseFloat(getVal('t2_jarak')) : null,
-      alat_transportasi: getVal('t2_transportasi'),
-      riwayat_penyakit: getVal('t2_penyakit'),
-      kelainan_jasmani: getVal('t2_kelainan'),
-      dusun: getVal('t2_dusun'),
-      // Program sosial
-      penerima_kps: getVal('t2_kps'),
-      no_kps: getVal('t2_noKPS'),
-      penerima_kip: getVal('t2_kip'),
-      no_kip: getVal('t2_noKIP'),
-      layak_pip: getRadio('t2_pip'),
-      // TK Asal
-      nama_sekolah_tk: getVal('t2_sekolahAsal'),
-      tgl_ijazah_tk: getVal('t2_tglIjazahTK') || null,
-      no_ijazah_tk: getVal('t2_noIjazahTK'),
-      lama_belajar_tk: getVal('t2_lamaBelajarTK'),
-      // Koordinat
-      lintang: getVal('t2_lintang'),
-      bujur: getVal('t2_bujur'),
-      // ─── ALAMAT SISWA ───────────────────────────────────────
+      nik_ayah: nikAyah,
+      nik_ibu: nikIbu,
+      // Data siswa tambahan
       alamat: getVal('t2_jalan'),
-      rt: getVal('t2_rt'),
-      rw: getVal('t2_rw'),
       kelurahan: getVal('t2_kel'),
       kecamatan: getVal('t2_kec'),
       kota: getVal('t2_kota'),
       provinsi: getVal('t2_prov'),
       kode_pos: getVal('t2_kodePos'),
-      no_telepon: getVal('t2_telp'),
-      // ─── DATA AYAH LENGKAP ─────────────────────────────────
-      nik_ayah: nikAyah,
-      kewarganegaraan_ayah: getVal('t2_wniAyah'),
-      pendidikan_ayah: getVal('t2_pendidikanAyah'),
-      pekerjaan_ayah: getValPekerjaan('t2_pekerjaanAyah','t2_pekerjaanAyahLainnya'),
-      penghasilan_ayah: getVal('t2_penghasilanAyah'),
-      alamat_ayah: getVal('t2_jalanAyah'),
-      rt_ayah: getVal('t2_rtAyah'),
-      rw_ayah: getVal('t2_rwAyah'),
-      kode_pos_ayah: getVal('t2_kodePosAyah'),
-      kelurahan_ayah: getVal('t2_kelAyah'),
-      kecamatan_ayah: getVal('t2_kecAyah'),
-      kota_ayah: getVal('t2_kotaAyah'),
-      provinsi_ayah: getVal('t2_provAyah'),
-      // ─── DATA IBU LENGKAP ──────────────────────────────────
-      nik_ibu: nikIbu,
-      kewarganegaraan_ibu: getVal('t2_wniIbu'),
-      pendidikan_ibu: getVal('t2_pendidikanIbu'),
-      pekerjaan_ibu: getValPekerjaan('t2_pekerjaanIbu','t2_pekerjaanIbuLainnya'),
-      penghasilan_ibu: getVal('t2_penghasilanIbu'),
-      alamat_ibu: getVal('t2_jalanIbu'),
-      rt_ibu: getVal('t2_rtIbu'),
-      rw_ibu: getVal('t2_rwIbu'),
-      kode_pos_ibu: getVal('t2_kodePosIbu'),
-      kelurahan_ibu: getVal('t2_kelIbu'),
-      kecamatan_ibu: getVal('t2_kecIbu'),
-      kota_ibu: getVal('t2_kotaIbu'),
-      provinsi_ibu: getVal('t2_provIbu'),
-      // ─── DATA WALI ─────────────────────────────────────────
-      nama_wali: getVal('t2_namaWali'),
-      nik_wali: getVal('t2_nikWali'),
-      tempat_lahir_wali: getVal('t2_tempatLahirWali'),
-      tanggal_lahir_wali: getVal('t2_tglLahirWali') || null,
-      kewarganegaraan_wali: getVal('t2_wniWali'),
-      pendidikan_wali: getVal('t2_pendidikanWali'),
-      pekerjaan_wali: getValPekerjaan('t2_pekerjaanWali','t2_pekerjaanWaliLainnya'),
-      penghasilan_wali: getVal('t2_penghasilanWali'),
-      no_hp_wali: getVal('t2_hpWali'),
-      alamat_wali: getVal('t2_jalanWali'),
-      rt_wali: getVal('t2_rtWali'),
-      rw_wali: getVal('t2_rwWali'),
-      kode_pos_wali: getVal('t2_kodePosWali'),
-      kelurahan_wali: getVal('t2_kelWali'),
-      kecamatan_wali: getVal('t2_kecWali'),
-      kota_wali: getVal('t2_kotaWali'),
-      provinsi_wali: getVal('t2_provWali'),
-      // ─── DOKUMEN ───────────────────────────────────────────
+      // Kesehatan
+      riwayat_penyakit: getVal('t2_penyakit'),
+      kebutuhan_khusus: getVal('t2_kelainan'),
+      // Dokumen
+      foto_siswa_url,
       akta_lahir_url,
       kartu_keluarga_url,
-      ktp_ayah_url,
-      ktp_ibu_url,
-      ktp_wali_url,
     };
 
     // Update jika sudah ada id, insert baru jika tidak
@@ -1995,18 +1874,13 @@ async function submitTahap2() {
     window.scrollTo({top:0, behavior:'smooth'});
 
   } catch (err) {
-    console.error('Tahap2 error:', err);
-    const msg = err.message || '';
-    if (msg.includes('column') || msg.includes('null') || msg.includes('violates')) {
-      showToast('Error kolom database: ' + msg.slice(0,100));
-    } else if (msg.includes('JWT') || msg.includes('apikey') || msg.includes('auth')) {
-      showToast('Error autentikasi Supabase. Cek API key.');
-    } else {
-      showToast('Gagal menyimpan: ' + (msg.slice(0,80) || 'periksa koneksi internet'));
-    }
+    console.error(err);
+    showToast('Gagal menyimpan. Periksa koneksi internet.');
     if (btn) { btn.disabled = false; btn.textContent = 'Kirim Data Lengkap ✓'; }
   }
 }
+
+
 // ===== LANDING PAGE LOGIC =====
 function mulaiDaftarBaru() {
   const lo = document.getElementById('landingOverlay');
