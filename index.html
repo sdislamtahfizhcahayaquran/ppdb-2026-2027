@@ -473,7 +473,8 @@ select option { background: white; }
       <div class="divider"><span>Data SD Asal</span></div>
       <div class="field-group">
         <label>NISN <span class="req">*</span></label>
-        <input type="text" id="nisnSiswa" placeholder="10 digit NISN" maxlength="10" inputmode="numeric">
+        <input type="text" id="nisnSiswa" placeholder="10 digit NISN (isi 0 jika belum punya)" maxlength="10" inputmode="numeric">
+        <div class="field-note">Jika belum memiliki NISN, isi dengan angka 0</div>
       </div>
       <div class="field-group">
         <label>Masuk ke Kelas <span class="req">*</span></label>
@@ -488,7 +489,7 @@ select option { background: white; }
         <input type="text" id="namaSDasal" placeholder="SD Negeri / SD Islam ..." oninput="formatNama(this)">
       </div>
       <div class="field-group">
-        <label>Alamat SD Asal</label>
+        <label>Alamat SD Asal <span class="req">*</span></label>
         <input type="text" id="alamatSDasal" placeholder="Alamat lengkap SD asal">
       </div>
     </div>
@@ -1150,11 +1151,12 @@ select option { background: white; }
       <div class="field-row">
         <div class="field-group">
           <label>Pekerjaan</label>
-          <select id="t2_pekerjaanIbu">
+          <select id="t2_pekerjaanIbu" onchange="showLainnya(this,'t2_pekerjaanIbuLain')">
             <option value="">Pilih</option>
             <option>PNS/ASN</option><option>Karyawan Swasta</option><option>Wiraswasta</option>
             <option>Guru/Dosen</option><option>Ibu Rumah Tangga</option><option>Lainnya</option>
           </select>
+          <input type="text" id="t2_pekerjaanIbuLain" placeholder="Tuliskan pekerjaan..." style="display:none;margin-top:8px">
         </div>
         <div class="field-group">
           <label>Penghasilan/Bulan</label>
@@ -1531,6 +1533,7 @@ const REQUIRED = {
       f.push({id:'nisnSiswa', label:'NISN'});
       f.push({id:'masukKelas', label:'Masuk ke Kelas'});
       f.push({id:'namaSDasal', label:'Nama SD Asal'});
+      f.push({id:'alamatSDasal', label:'Alamat SD Asal'});
     }
     return f;
   },
@@ -1655,6 +1658,21 @@ function updateUI() {
 
 window.nextStep = function nextStep() {
   if (!validateStep(currentStep)) return;
+  // Validasi NISN untuk pindahan
+  if (currentStep === 1) {
+    const isPindahan = document.querySelector('input[name="tipe"]:checked')?.value === 'pindahan';
+    if (isPindahan) {
+      const nisn = document.getElementById('nisnSiswa')?.value.trim();
+      if (!nisn) {
+        showToast('Wajib diisi: NISN (isi 0 jika tidak punya)');
+        return;
+      }
+      if (!/^\d+$/.test(nisn)) {
+        showToast('NISN harus berupa angka');
+        return;
+      }
+    }
+  }
   if (currentStep < totalSteps - 1) {
     currentStep++;
     updateUI();
@@ -1668,6 +1686,33 @@ window.prevStep = function prevStep() {
 }
 
 async function submitTahap1() {
+  // Validasi surat & ayat wajib kalau ada hafalan
+  const juzVal = document.getElementById('juzHafalan').value;
+  if (juzVal && juzVal !== '0') {
+    if (!document.getElementById('suratValue').value) {
+      showToast('Wajib diisi: Nama Surat Hafalan Terakhir');
+      document.getElementById('suratInput').focus();
+      return;
+    }
+    if (!document.getElementById('ayatHafalan').value) {
+      showToast('Wajib diisi: Sampai Ayat ke-');
+      document.getElementById('ayatHafalan').focus();
+      return;
+    }
+    if (juzVal === 'lebih') {
+      if (!document.getElementById('juzJumlah').value) {
+        showToast('Wajib diisi: Jumlah Juz yang Dihafal');
+        document.getElementById('juzJumlah').focus();
+        return;
+      }
+      if (!document.getElementById('juzList').value) {
+        showToast('Wajib diisi: Juz Apa Saja');
+        document.getElementById('juzList').focus();
+        return;
+      }
+    }
+  }
+
   // Disable tombol supaya tidak double submit
   const btn = document.querySelector('#navBar .btn-submit') || document.querySelector('.btn-submit');
   if (btn) { btn.disabled = true; btn.textContent = 'Menyimpan...'; }
