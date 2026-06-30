@@ -334,11 +334,11 @@ body{font-family:Tahoma,Geneva,Verdana,sans-serif;background:var(--bg);color:var
       <div class="fg">
         <label>Koordinat Lokasi Rumah <span class="req">*</span></label>
         <div class="gps-row">
-          <div class="fg" style="margin:0"><input type="text" id="lat" placeholder="Lintang" readonly></div>
-          <div class="fg" style="margin:0"><input type="text" id="lng" placeholder="Bujur" readonly></div>
+          <div class="fg" style="margin:0"><input type="text" id="lat" placeholder="Lintang"></div>
+          <div class="fg" style="margin:0"><input type="text" id="lng" placeholder="Bujur"></div>
           <button class="btn-gps" id="btn-gps" onclick="ambilGPS()"><svg width="14" height="14" style="vertical-align:-2px;margin-right:4px"><use href="#ic-pin"/></svg>Ambil Lokasi</button>
         </div>
-        <div class="fn warn" id="gps-status">Klik tombol untuk mengambil koordinat lokasi rumah secara otomatis</div>
+        <div class="fn warn" id="gps-status">Klik tombol untuk mengambil otomatis. Jika gagal, buka Google Maps di HP, tekan & tahan lokasi rumah di peta, lalu salin angka koordinat yang muncul (contoh: -6.123456, 106.789012) ke kolom Lintang & Bujur</div>
       </div>
     </div>
   </div>
